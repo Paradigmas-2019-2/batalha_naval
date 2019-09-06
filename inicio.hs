@@ -2,83 +2,79 @@ import System.IO
 import System.Process
 import Data.Char
 import System.Random
+import Data.Function
+import Data.List
+import Control.Exception
+
+type Jogadores = [Jogador]
+type Navio = [Int]
+type Pontos = Int
+type Nome = String
+type Vez = Int
+data Jogador =  Jogador Navio Pontos Vez
+                    deriving (Show, Read)
+
 mar = replicate 100 '~'
 
+inicio ::IO ()
 
-menu::IO String
-menu = do
-    putStrLn "-----------------------------------Batalha-Naval----------------------------"
-    putStrLn "Opções:"
-    putStrLn "\t1 - Iniciar o jogo:"
-    putStrLn "\t2 - Historico:"
-    putStrLn "\t3 - Sair:"
+inicio = do 
+    menu [];
+    return ()
+                
+-- menu poara inicio
+menu::Jogadores ->IO Jogadores
+menu dados = do
+    system "clear"
+    putStrLn "----------------------------Batalha Naval----------------------------"
+    putStrLn "\nDigite 1 para cadastrar o jogador: "
+    putStrLn "\nDigite 2 para jogar: "
+    putStrLn "\nDigite 0 para sair: "
+    putStrLn "\n-------------------------------------------------------------------"
     opcao <- getChar
     getChar
-    opcoes opcao
+    defineOpcao dados opcao
 
-opcoes::Char->IO String
-opcoes op = iniciaJogo
+-- função para o usuario decidir opções do menu
+defineOpcao :: Jogadores->Char->IO Jogadores
+defineOpcao dados '1' = rodada dados
+defineOpcao dados '0' = do
+                            putStrLn "saiu"
+                            return dados
+-- defineOpcao dados _ = do            
+--                             putStrLn ("\n Opção invalida")
+--                             putStr "\n Precione enter para voltar ao menu"
+--                             getChar
+--                             menu dados
 
-iniciaJogo::IO String
-iniciaJogo =do 
+rodada::Jogadores ->IO Jogadores
+rodada dados = do
     system "clear"
+    putStr "Jogador 1 digite seu nome: "
+    jogador1 <- getLine
     system "clear"
-    putStr "\tNome Jogador1: "
-    nome1 <- getLine
-    system "clear"
-    putStr "\tNome Jogador2: "
-    nome2 <- getLine
-    system "clear"
-    imprimeDupla nome1 nome2
-    let oceano = replicate 100 '~'
-    imprimeMar oceano
-    getChar
-    jogo nome1 nome2 1
-
-    return nome1
-
-jogo::String->String->Int->IO Char
-jogo jogador1 jogador2 vez = do
-    system "clear"
-    if(vez==1) then do
-        putStrLn ("É a vez do "++jogador1++"...")
-        putStrLn "------------------Coordenadas----------------"
-        putStr "\nY(letra): "
-        y <-getChar
-        getChar
-        putStr "X(numero): "
-        x <-getChar
-        getChar
-        let res = validaDisparo x y
-        print(res)
-        return 'a'
-
-    else do
-        putStr ("a")
-        return 'a'
+    putStr "Jogador 2 digite seu nome: "
+    jogador2 <- getLine 
+---- trocar a funçao abaixo
+    rodada dados
 
 
+
+-------Alterar os tipos de todas as funçoes abaixo
 imprimeDupla::String->String->IO ()
 imprimeDupla nome1 nome2 = do
     putStrLn (nome1 ++ "  X  " ++ nome2)
 
-
-
-
-
-
-
-
 validaDisparo:: Char-> Char-> Bool
 validaDisparo x y 
-                    |((elem x a) &&(elem y b)) = True
+                    |((elem x a) == (elem y b)) = True
                     |otherwise = False
                     where
-                        a = ['A','B','C','D','E','a','b','c','d','e']
-                        b = ['1','2','3','4','5','6','7','8','9']
+                        a = ['A','B','C','D','E','F','G','H','I','J']
+                        b = ['0','1','2','3','4','5','6','7','8','9']
 --funcao responsavel por converter as entradas em inteiros
 converteEntradas :: Char->Int
-converteEntradas entrada = digitToInt entrada
+converteEntradas entrada = ord entrada
 
 --verifica se o disparo acertou agua(0), navio(#) ou se já aconteceu(*)
 verificaDisparo::Int->[Char]->Int
@@ -121,7 +117,7 @@ disparoComputador = do
     return (number)
 
 
-imprimeMar::String->IO ()
+imprimeMar::String->IO () 
 imprimeMar tabela = do
     putStr("   0   1   2   3   4   5   6   7   8  9\n" ++
                 "A "++(show(tabela!!0))++" "++(show(tabela!!1))++" "++(show(tabela!!2))++" "++(show(tabela!!3))++" "++(show(tabela!!4))++" "++(show(tabela!!5))++" "++(show(tabela!!6))++" "++(show(tabela!!7))++" "++(show(tabela!!8))++" "++(show(tabela!!9))++"\n"++
