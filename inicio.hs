@@ -17,7 +17,14 @@ menu = do
     opcoes opcao
 
 opcoes::Char->IO String
-opcoes op = iniciaJogo
+opcoes '1' = do
+            iniciaJogo
+opcoes '2' = do 
+            putStrLn "sair..."
+            return"saiu"
+opcoes '3' = do 
+            putStrLn "sair..."
+            return"saiu"
 
 iniciaJogo::IO String
 iniciaJogo =do 
