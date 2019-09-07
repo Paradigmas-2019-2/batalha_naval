@@ -55,9 +55,212 @@ rodada dados = do
     system "clear"
     putStr "Jogador 2 digite seu nome: "
     jogador2 <- getLine 
----- trocar a funçao abaixo
-    rodada dados
+    jogo dados jogador1 jogador2
 
+--INICIA O JOGO 
+jogo::Jogadores -> Nome ->Nome ->IO Jogadores
+jogo dados jogador1 jogador2 = do
+    system "clear"
+    putStrLn ("---------------------" ++ jogador1 ++ " X " ++ jogador2 ++ "---------------------")
+    ---adcionar as regras do jogo e como funciona
+    putStrLn "--------Regras ------"
+    putStrLn "precione Enter para pular ..."
+    getChar
+    system "clear"
+    let oceano = mar
+    --Deve fazer o posicionamento dos navios agora
+    putStrLn "\nJogador 1 posicione seu navio: "
+    putStr "Letra(A-J): "
+    y1 <- getChar
+    getChar
+    putStr "\nNumero(0-9): "
+    x1 <- getChar
+    getChar
+    putStr "orientacao(H ou V): "
+    z1 <- getChar
+    getChar
+    let res1 = validaDisparo x1 y1 z1
+    if not(res1) then do
+        putStrLn "ENTRADA(S) INVALIDAS.....\nPRESSIONE ENTER PARA CONTINUAR....."
+        getChar
+        jogo dados jogador1 jogador2
+    else do
+        system "clear"
+        putStrLn "\nJogador 2 posicione seu navio: "
+        putStr "Letra(A-J): "
+        y2 <- getChar
+        getChar
+        putStr "\nNumero(0-9): "
+        x2 <- getChar
+        getChar
+        putStr "orientacao(H ou V): "
+        z2 <- getChar
+        getChar
+        if not(res1 == validaDisparo y2 x2 z2) then do
+            system "clear"
+            putStrLn "ENTRADA(S) INVALIDAS.....\nPRESSIONE ENTER PARA CONTINUAR....."
+            getChar
+            jogo dados jogador1 jogador2
+        else do
+            ---SE CHEGOU AQUI AS ENTRADAS SÃO VALIDAS
+            --converte as entradas em um int para usar a função armazenaNavio
+            let a = ((((converteEntradas y1)-65)*10)+((converteEntradas x1)-48))
+            let navio1 = armazenaPosicaoNavio a z1
+            let b = ((((converteEntradas y2)-65)*10)+((converteEntradas x2)-48))
+            let navio2 = armazenaPosicaoNavio a z2
+            ---FALTA VARIFICAR SE ALGUM NAVIO É [] SE FOR CHAME A FUNÇÃO JOGO NOVAMENTE
+            executarJogo dados oceano oceano jogador1 jogador2 navio1 navio2 1
+        getChar
+        menu dados
+
+    menu dados
+    --executarJogo dados mar jogador1 jogador2 1
+
+--função responsavel por coordenar as jogadas
+executarJogo::Jogadores->[Char]->[Char]->Nome->Nome->Navio->Navio->Vez->IO Jogadores
+executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
+        --VERIFICAR SE ALGUM JOGADOR VENCEU
+        if (navio1 == []) then do
+            system "clear"
+            putStrLn ("******************************      O JOGADOR " ++ jogador2 ++" VENCEU!! *****************************")
+            putStrLn "Precione ENTER para sair ...."
+            getChar
+            menu dados 
+        else do
+            if(navio2 == []) then do
+                system "clear"
+                putStrLn ("******************************      O JOGADOR " ++ jogador1 ++" VENCEU!! *****************************")
+                putStrLn "Precione ENTER para sair ...."
+                getChar
+                menu dados
+            else do 
+                --SE CHEGOU AQ É QUE O JOGO NÃO TERMINOU HORA DE VERIFICAR DE QUEM É A VEZ
+                if (vez == 1 ) then do
+                    system "clear"
+                    putStrLn ("Vez do " ++ jogador1 ++ "...")
+                    imprimeMar oceano2
+                    putStrLn "\nDISPARO....."
+                    putStr "LETRA(A-j): "
+                    tentativay <- getChar
+                    getChar
+                    putStr "NUMERO(0-9): "
+                    tentativax <- getChar
+                    getChar
+                    ----VERIFICA SE A JÁ ACONTECEU O DISPARO
+                    let a2= ((((converteEntradas tentativay)-65)*10)+((converteEntradas tentativax)-48))
+                    let resultadodisparo = verificaDisparo a2 oceano2
+                    if ((resultadodisparo == 1) || (resultadodisparo == 10)) then do
+                        system "clear"
+                        putStrLn "Já foi efetuado disparo nessa posição.Por favor tente outra...."
+                        putStrLn "precione ENTER para continuar...."
+                        getChar
+                        executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 1
+                    else do
+                        ---SE CHEGOU AQ QUER DIZER QUE AINDA NÃO FOI DISPARADO NO CAMPO PODE PROCEGUIR
+                        --VERIFICAR SE ACERTOU AGUA OU NAVIO
+                        let ver = verificaDisparo a2 oceano2
+                        if(elem a2 navio2) then do
+                            system "clear"
+                            
+                            putStrLn "ACERTOU O NAVIO..."
+                            let novomar = atualizaCampo a2 '#'oceano2
+                            imprimeMar novomar
+                            putStrLn "Precione ENTER ..."
+                            let novonavio =removePosicao a2 navio2
+                            getChar
+                            --passa a vez para o outro jogador
+                            executarJogo dados oceano novomar jogador1 jogador2 navio1 novonavio 1
+                        else do 
+                            ---ACERTOU A AGUA
+                            system "clear"
+                            putStrLn "AGUAAAAA....."
+                            let novomar = atualizaCampo a2 '*'oceano2
+                            imprimeMar novomar
+                            putStrLn "Precione ENTER ..."
+                            getChar
+                            --passa a vez para o outro jogador
+                            executarJogo dados oceano novomar jogador1 jogador2 navio1 navio2 2
+
+                        getChar
+                        menu dados
+                    
+
+
+
+                    getChar
+                    menu dados
+                else do
+                    system "clear"
+                    putStrLn ("Vez do " ++ jogador2 ++ "...")
+                    imprimeMar oceano
+                    putStrLn "\nDISPARO....."
+                    putStr "LETRA(A-J): "
+                    tentativay <- getChar
+                    getChar
+                    putStr "NUMERO(0-9): "
+                    tentativax <- getChar
+                    getChar
+                    ----VERIFICA SE A JÁ ACONTECEU O DISPARO
+                    let a2= ((((converteEntradas tentativay)-65)*10)+((converteEntradas tentativax)-48))
+                    let resultadodisparo = verificaDisparo a2 oceano2
+                    if ((resultadodisparo == 1) || (resultadodisparo == 10)) then do
+                        system "clear"
+                        putStrLn "Já foi efetuado disparo nessa posição.Por favor tente outra...."
+                        putStrLn "precione ENTER para continuar...."
+                        getChar
+                        executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 2
+                    else do
+                        ---SE CHEGOU AQ QUER DIZER QUE AINDA NÃO FOI DISPARADO NO CAMPO PODE PROCEGUIR
+                        --VERIFICAR SE ACERTOU AGUA OU NAVIO
+                        let ver = verificaDisparo a2 oceano2
+                        if(elem a2 navio2) then do
+                            system "clear"
+                            
+                            putStrLn "ACERTOU O NAVIO..."
+                            let novomar = atualizaCampo a2 '#'oceano2
+                            imprimeMar novomar
+                            putStrLn "Precione ENTER ..."
+                            let novonavio =removePosicao a2 navio2
+                            getChar
+                            --passa a vez para o outro jogador
+                            executarJogo dados oceano novomar jogador1 jogador2 navio1 novonavio 2
+                        else do 
+                            ---ACERTOU A AGUA
+                            system "clear"
+                            putStrLn "AGUAAAAA....."
+                            let novomar = atualizaCampo a2 '*'oceano2
+                            imprimeMar novomar
+                            putStrLn "Precione ENTER ..."
+                            getChar
+                            --passa a vez para o outro jogador
+                            executarJogo dados oceano novomar jogador1 jogador2 navio1 navio2 1
+
+                        putStrLn "disparo valido"
+                        getChar
+                        menu dados
+
+
+            
+                putStrLn "chegou 777naviioooo"
+                getChar
+                menu dados
+            menu dados 
+
+        putStrLn "chegou naviioooo"
+        getChar
+        jogo dados jogador1 jogador2
+
+--vencedor::Jogadores->Nome->IO Jogadores
+--vencedor  dados nome = do
+--    system "clear"
+--    putStrLn "---------------------------------------------------------------"
+--    putStrLn "---------------------------------------------------------------"
+--    putStrLn "\t\t\t\t"++ nome ++" é o grande vencedor!!!!!!!!!!!"
+--    putStrLn "---------------------------------------------------------------"
+ --   putStrLn "---------------------------------------------------------------"
+  --  putStrLn "PRECIONE ENTER PARA CONTINUAR...."
+   -- getChar
+    --menu dados
 
 
 -------Alterar os tipos de todas as funçoes abaixo
@@ -65,12 +268,12 @@ imprimeDupla::String->String->IO ()
 imprimeDupla nome1 nome2 = do
     putStrLn (nome1 ++ "  X  " ++ nome2)
 
-validaDisparo:: Char-> Char-> Bool
-validaDisparo x y 
-                    |((elem x a) == (elem y b)) = True
+validaDisparo:: Char-> Char->Char-> Bool
+validaDisparo x y z
+                    |((elem x a) == (elem y b)&&(elem z a)) = True
                     |otherwise = False
                     where
-                        a = ['A','B','C','D','E','F','G','H','I','J']
+                        a = ['A','B','C','D','E','F','G','H','I','J','V']
                         b = ['0','1','2','3','4','5','6','7','8','9']
 --funcao responsavel por converter as entradas em inteiros
 converteEntradas :: Char->Int
@@ -130,3 +333,8 @@ imprimeMar tabela = do
                 "H "++(show(tabela!!70))++" "++(show(tabela!!71))++" "++(show(tabela!!72))++" "++(show(tabela!!73))++" "++(show(tabela!!74))++" "++(show(tabela!!75))++" "++(show(tabela!!76))++" "++(show(tabela!!77))++" "++(show(tabela!!78))++" "++(show(tabela!!79))++"\n"++
                 "I "++(show(tabela!!80))++" "++(show(tabela!!81))++" "++(show(tabela!!82))++" "++(show(tabela!!83))++" "++(show(tabela!!84))++" "++(show(tabela!!85))++" "++(show(tabela!!86))++" "++(show(tabela!!87))++" "++(show(tabela!!88))++" "++(show(tabela!!89))++"\n"++
                 "J "++(show(tabela!!90))++" "++(show(tabela!!91))++" "++(show(tabela!!92))++" "++(show(tabela!!93))++" "++(show(tabela!!94))++" "++(show(tabela!!95))++" "++(show(tabela!!96))++" "++(show(tabela!!97))++" "++(show(tabela!!98))++" "++(show(tabela!!99))++"\n")
+
+removePosicao:: Int->Navio->Navio
+removePosicao _ [] = []
+removePosicao x (y:xs) | x == y    = removePosicao x xs
+                       | otherwise = y : removePosicao x xs
