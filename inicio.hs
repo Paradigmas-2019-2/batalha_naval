@@ -106,8 +106,10 @@ jogo dados jogador1 jogador2 = do
             --converte as entradas em um int para usar a função armazenaNavio
             let a = ((((converteEntradas y1)-65)*10)+((converteEntradas x1)-48))
             let navio1 = armazenaPosicaoNavio a z1
+           
+            getChar
             let b = ((((converteEntradas y2)-65)*10)+((converteEntradas x2)-48))
-            let navio2 = armazenaPosicaoNavio a z2
+            let navio2 = armazenaPosicaoNavio b z2
             ---FALTA VARIFICAR SE ALGUM NAVIO É [] SE FOR CHAME A FUNÇÃO JOGO NOVAMENTE
             executarJogo dados oceano oceano jogador1 jogador2 navio1 navio2 1
         getChar
@@ -183,10 +185,6 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
 
                         getChar
                         menu dados
-                    
-
-
-
                     getChar
                     menu dados
                 else do
@@ -202,7 +200,7 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
                     getChar
                     ----VERIFICA SE A JÁ ACONTECEU O DISPARO
                     let a2= ((((converteEntradas tentativay)-65)*10)+((converteEntradas tentativax)-48))
-                    let resultadodisparo = verificaDisparo a2 oceano2
+                    let resultadodisparo = verificaDisparo a2 oceano
                     if ((resultadodisparo == 1) || (resultadodisparo == 10)) then do
                         system "clear"
                         putStrLn "Já foi efetuado disparo nessa posição.Por favor tente outra...."
@@ -212,28 +210,28 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
                     else do
                         ---SE CHEGOU AQ QUER DIZER QUE AINDA NÃO FOI DISPARADO NO CAMPO PODE PROCEGUIR
                         --VERIFICAR SE ACERTOU AGUA OU NAVIO
-                        let ver = verificaDisparo a2 oceano2
-                        if(elem a2 navio2) then do
+                        let ver = verificaDisparo a2 oceano
+                        if(elem a2 navio1) then do
                             system "clear"
                             
                             putStrLn "ACERTOU O NAVIO..."
-                            let novomar = atualizaCampo a2 '#'oceano2
+                            let novomar = atualizaCampo a2 '#'oceano
                             imprimeMar novomar
                             putStrLn "Precione ENTER ..."
-                            let novonavio =removePosicao a2 navio2
+                            let novonavio =removePosicao a2 navio1
                             getChar
                             --passa a vez para o outro jogador
-                            executarJogo dados oceano novomar jogador1 jogador2 navio1 novonavio 2
+                            executarJogo dados novomar oceano2 jogador1 jogador2 novonavio navio1 2
                         else do 
                             ---ACERTOU A AGUA
                             system "clear"
                             putStrLn "AGUAAAAA....."
-                            let novomar = atualizaCampo a2 '*'oceano2
+                            let novomar = atualizaCampo a2 '*'oceano
                             imprimeMar novomar
                             putStrLn "Precione ENTER ..."
                             getChar
                             --passa a vez para o outro jogador
-                            executarJogo dados oceano novomar jogador1 jogador2 navio1 navio2 1
+                            executarJogo dados novomar oceano2 jogador1 jogador2 navio1 navio2 1
 
                         putStrLn "disparo valido"
                         getChar
