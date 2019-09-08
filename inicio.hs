@@ -63,7 +63,7 @@ jogo dados jogador1 jogador2 = do
     system "clear"
     putStrLn ("---------------------" ++ jogador1 ++ " X " ++ jogador2 ++ "---------------------")
     ---adcionar as regras do jogo e como funciona
-    putStrLn "--------Regras ------"
+    imprimeRegras
     putStrLn "precione Enter para pular ..."
     getChar
     system "clear"
@@ -73,10 +73,10 @@ jogo dados jogador1 jogador2 = do
     putStr "Letra(A-J): "
     y1 <- getChar
     getChar
-    putStr "\nNumero(0-9): "
+    putStr "Numero(0-9): "
     x1 <- getChar
     getChar
-    putStr "orientacao(H ou V): "
+    putStr "Orientacao(H ou V): "
     z1 <- getChar
     getChar
     let res1 = validaDisparo x1 y1 z1
@@ -90,7 +90,7 @@ jogo dados jogador1 jogador2 = do
         putStr "Letra(A-J): "
         y2 <- getChar
         getChar
-        putStr "\nNumero(0-9): "
+        putStr "Numero(0-9): "
         x2 <- getChar
         getChar
         putStr "orientacao(H ou V): "
@@ -260,6 +260,30 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
    -- getChar
     --menu dados
 
+imprimeRegras::IO ()
+imprimeRegras = do
+    system "clear"
+    putStrLn "---------------------------------- Regras --------------------------------------"
+    putStrLn "É necessário ter dois jogadores."
+    putStrLn "Ganha o jogador que acertar primeiro as três partes do navio adverdário"
+    putStrLn "Após o Cadastro, os jogadores devem posicionar seus navios no tabuleiro."
+    putStrLn "O tamanho do tabuleiro é de 10x10 com coordenadas de A até J e de 0 até 9."
+    putStrLn "O navio ocupará 3 posições consecutivas tanto na horizontal (H) como na vertical (V)."
+    putStrLn "O jogador deve indicar a posição e a orientação central do seu navio."
+    putStrLn "\n\tExemplo: \nLETRA(A-J): D\nNUMERO(0-9): 5\nORIENTACAO(H ou V): H."
+    putStrLn "\nPara realizar o disparo no navio inimigo o jogador deve indicar as coordenadas compostas por uma letra(A-J) e um numero(0-9)."
+    putStrLn "\n\tExemplo: \nLETRA(A-J): C\nNUMERO(0-9): 5\n"
+    putStrLn "Caso o disparo atinja o navio inimigo será exibido o caracter '#' na posição indicada,"
+    putStrLn "Caso o disparo atinja a água será exibido o caracter '*'."
+    putStrLn "\n\tSIMBOLOS E SEUS SIGNIFICADOS: "
+    putStrLn "'~' - Posição não revelada."
+    putStrLn "'*' - Jogador acertou a água."
+    putStrLn "'#' - Jogador acertou o navio inimigo."
+    putStrLn "\n\tTECLAS: "
+    putStrLn "Orientação vertical: A,B,C,D,E,F,G,H,I,J"
+    putStrLn "Orientação horizontal: 0,1,2,3,4,5,6,7,8,9"
+
+    putStrLn "Não é possível apagar, digite apenas quando tiver certeza!!"
 
 -------Alterar os tipos de todas as funçoes abaixo
 imprimeDupla::String->String->IO ()
