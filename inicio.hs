@@ -140,12 +140,23 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
                     putStrLn ("Vez do " ++ jogador1 ++ "...")
                     imprimeMar oceano2
                     putStrLn "\nDISPARO....."
-                    putStr "LETRA(A-j): "
+                    putStr "LETRA(A-J): "
                     tentativay <- getChar
                     getChar
                     putStr "NUMERO(0-9): "
                     tentativax <- getChar
                     getChar
+                    let o = validaDisparo tentativay tentativax 'A'
+                    if (o ==False) then do
+                        putStrLn ("\nEntrada invalida")
+                        putStrLn "Pressione ENTER para jogar novamente..."
+                        getChar
+                        executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 1
+                        putStrLn ("\n")
+                        
+                    else do {
+                        putStrLn ("certo")   
+                    }
                     ----VERIFICA SE A JÁ ACONTECEU O DISPARO
                     let a2= ((((converteEntradas tentativay)-65)*10)+((converteEntradas tentativax)-48))
                     let resultadodisparo = verificaDisparo a2 oceano2
@@ -196,6 +207,17 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
                     putStr "NUMERO(0-9): "
                     tentativax <- getChar
                     getChar
+                    let o = validaDisparo tentativay tentativax 'A'
+                    if (o ==False) then do
+                        putStrLn ("\nEntrada invalida")
+                        putStrLn "Pressione ENTER para jogar novamente..."
+                        getChar
+                        executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 2
+                        putStrLn ("\n")
+                        
+                    else do {
+                        putStrLn ("certo")   
+                    }
                     ----VERIFICA SE A JÁ ACONTECEU O DISPARO
                     let a2= ((((converteEntradas tentativay)-65)*10)+((converteEntradas tentativax)-48))
                     let resultadodisparo = verificaDisparo a2 oceano
@@ -245,8 +267,6 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
         putStrLn "chegou naviioooo"
         getChar
         jogo dados jogador1 jogador2
-
-
 
 vencedor::Nome->IO ()
 vencedor jogador = do
