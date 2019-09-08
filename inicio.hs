@@ -69,7 +69,7 @@ jogo dados jogador1 jogador2 = do
     system "clear"
     let oceano = mar
     --Deve fazer o posicionamento dos navios agora
-    putStrLn "\nJogador 1 posicione seu navio: "
+    putStrLn (show(jogador1)++" posicione seu navio (NAO DEIXE O ADVERSARIO VER): ")
     putStr "Letra(A-J): "
     y1 <- getChar
     getChar
@@ -86,7 +86,7 @@ jogo dados jogador1 jogador2 = do
         jogo dados jogador1 jogador2
     else do
         system "clear"
-        putStrLn "\nJogador 2 posicione seu navio: "
+        putStrLn (show(jogador2)++" posicione seu navio (NAO DEIXE O ADVERSARIO VER): ")
         putStr "Letra(A-J): "
         y2 <- getChar
         getChar
@@ -106,8 +106,6 @@ jogo dados jogador1 jogador2 = do
             --converte as entradas em um int para usar a função armazenaNavio
             let a = ((((converteEntradas y1)-65)*10)+((converteEntradas x1)-48))
             let navio1 = armazenaPosicaoNavio a z1
-           
-            getChar
             let b = ((((converteEntradas y2)-65)*10)+((converteEntradas x2)-48))
             let navio2 = armazenaPosicaoNavio b z2
             ---FALTA VARIFICAR SE ALGUM NAVIO É [] SE FOR CHAME A FUNÇÃO JOGO NOVAMENTE
@@ -124,14 +122,14 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
         --VERIFICAR SE ALGUM JOGADOR VENCEU
         if (navio1 == []) then do
             system "clear"
-            putStrLn ("******************************      O JOGADOR " ++ jogador2 ++" VENCEU!! *****************************")
+            vencedor jogador2
             putStrLn "Precione ENTER para sair ...."
             getChar
             menu dados 
         else do
             if(navio2 == []) then do
                 system "clear"
-                putStrLn ("******************************      O JOGADOR " ++ jogador1 ++" VENCEU!! *****************************")
+                vencedor jogador1
                 putStrLn "Precione ENTER para sair ...."
                 getChar
                 menu dados
@@ -248,17 +246,19 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
         getChar
         jogo dados jogador1 jogador2
 
---vencedor::Jogadores->Nome->IO Jogadores
---vencedor  dados nome = do
---    system "clear"
---    putStrLn "---------------------------------------------------------------"
---    putStrLn "---------------------------------------------------------------"
---    putStrLn "\t\t\t\t"++ nome ++" é o grande vencedor!!!!!!!!!!!"
---    putStrLn "---------------------------------------------------------------"
- --   putStrLn "---------------------------------------------------------------"
-  --  putStrLn "PRECIONE ENTER PARA CONTINUAR...."
-   -- getChar
-    --menu dados
+
+
+vencedor::Nome->IO ()
+vencedor jogador = do
+    system "clear"
+    putStrLn "################################################################################################"
+    putStrLn "                                              O"
+    putStrLn "                                           VENCEDOR"        
+    putStrLn "                                              É"
+    putStrLn ("                                          "++ (show(jogador)))
+    putStrLn "################################################################################################"
+
+
 
 imprimeRegras::IO ()
 imprimeRegras = do
