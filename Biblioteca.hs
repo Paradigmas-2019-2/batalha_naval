@@ -53,6 +53,11 @@ menu dados = do
 -- função para o usuario decidir opções do menu
 defineOpcao :: Jogadores->Char->IO Jogadores
 defineOpcao dados '1' = rodada dados
+-- defineOpcao dados '2' = do
+--                                 putStrLn "\nHistórico dos jogadores:\n"
+--                                 if (null dados) then do
+--                                     putStrLn ("Não há jogadores cadastrados!")
+--                                 else
 defineOpcao dados '0' = do
                             putStrLn "FIM"
                             return dados
@@ -291,8 +296,9 @@ vencedor jogador = do
     putStrLn "                                              É"
     putStrLn ("                                          "++ (show(jogador)))
     putStrLn "################################################################################################"
-
-
+    writeFile "historico.txt" ("-----------------------------------------------------------------------------")
+    writeFile "historico.txt" ("O vencendor foi "++ (show(jogador)))
+    writeFile "historico.txt" ("-----------------------------------------------------------------------------")
 
 imprimeRegras::IO ()
 imprimeRegras = do
