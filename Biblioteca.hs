@@ -28,6 +28,8 @@ import Data.Function
 import Data.List
 import Control.Exception
 
+
+
 type Jogadores = [Jogador]
 type Navio = [Int]
 type Pontos = Int
@@ -53,29 +55,32 @@ menu dados = do
 -- função para o usuario decidir opções do menu
 defineOpcao :: Jogadores->Char->IO Jogadores
 defineOpcao dados '1' = rodada dados
-defineOpcao dados '2' = historico dados
-                            -- putStrLn "Historico dos jogadores:"
-                            -- putStr 
-                            -- getChar
-	                       -- historico dados
+defineOpcao dados '2' = do 
+                            
+                            history <- readFile "historico.txt"
+                            putStr(history)
+                            putStr "\n Precione enter para voltar ao menu"
+                            getChar
+                            menu dados
 defineOpcao dados '0' = do
                             putStrLn "FIM"
                             return dados
 
 defineOpcao dados _ = do            
                             putStrLn ("\n Opção invalida")
-                            putStr "\n Precione enter para voltar ao menu"
+                            
                             getChar
                             menu dados
 
+-- LER O ARQUIVO HISTORICO
+historico:: IO ()
+historico = do  
+            
+            
+            --getChar
+            return ()
 
-historico::Jogadores ->IO Jogadores
-historico dados = do
--- ICIA UMA RODADA SALVADO OS JOGADORES.
-            putStrLn "\nHistorico dos jogadores:\n "
-            putStr "\n Precione enter para voltar ao menu"
-            getChar
-            menu dados
+-- INICIA UMA RODADA SALVADO OS JOGADORES
 rodada::Jogadores ->IO Jogadores
 rodada dados = do
     system "clear"
@@ -151,14 +156,14 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
         --VERIFICAR SE ALGUM JOGADOR VENCEU
         if (navio1 == []) then do
             system "clear"
-            vencedor jogador2
+            vencedor jogador2 jogador1
             putStrLn "Precione ENTER para sair ...."
             getChar
             menu dados 
         else do
             if(navio2 == []) then do
                 system "clear"
-                vencedor jogador1
+                vencedor jogador1 jogador2
                 putStrLn "Precione ENTER para sair ...."
                 getChar
                 menu dados
@@ -295,19 +300,16 @@ executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
         getChar
         jogo dados jogador1 jogador2
 
-vencedor::Nome->IO ()
-vencedor jogador = do
+vencedor::Nome->Nome->IO ()
+vencedor jogador jogador2 = do
     system "clear"
     putStrLn "################################################################################################"
-    putStrLn "                                              O"
-    putStrLn "                                           VENCEDOR"        
-    putStrLn "                                              É"
+    putStrLn "                                              O VENCEDOR É"     
     putStrLn ("                                          "++ (show(jogador)))
     putStrLn "################################################################################################"
     -- ESCREVE NO ARQUIVO O JOGADOR VENCEDOR.
-    writeFile "historico.txt" ("-----------------------------------------------------------------------------")
-    writeFile "historico.txt" ("O vencendor foi "++ (show(jogador)))
-    writeFile "historico.txt" ("-----------------------------------------------------------------------------")
+    writeFile "historico.txt" ((show(jogador))++" Ganhou do(a) "++(show(jogador2))++"\n")
+    
 
 imprimeRegras::IO ()
 imprimeRegras = do
