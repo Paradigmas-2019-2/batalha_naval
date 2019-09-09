@@ -60,6 +60,7 @@ defineOpcao dados '2' = do
                             history <- readFile "historico.txt"
                             putStr(history)
                             putStr "\n Precione enter para voltar ao menu"
+                           
                             getChar
                             menu dados
 defineOpcao dados '0' = do
@@ -308,7 +309,16 @@ vencedor jogador jogador2 = do
     putStrLn ("                                          "++ (show(jogador)))
     putStrLn "################################################################################################"
     -- ESCREVE NO ARQUIVO O JOGADOR VENCEDOR.
-    writeFile "historico.txt" ((show(jogador))++" Ganhou do(a) "++(show(jogador2))++"\n")
+    --ler o arquivo
+    arq <- openFile "historico.txt" ReadMode
+    no_arquivo <- hGetLine arq
+    hClose arq
+
+    -- abre o arquivo para escrita para atualizá-lo
+    arq <- openFile "historico.txt" WriteMode
+    hPutStrLn arq ((show(jogador))++" Ganhou do(a) "++(show(jogador2))++"\n"++(show(no_arquivo)))
+    hClose arq
+
     
 
 imprimeRegras::IO ()
