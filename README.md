@@ -40,3 +40,13 @@ para a disciplina de Paradigmas de Programação UNB-2019-2.</p>
     2. Rodar o GHCI pelo seguinte comando "ghci"
     3. Compile os arquivos com o comando ":l inicio.hs"
     4. Chame a funcão "inicio"
+
+## Autores
+
+| Nome | GitHub | Matricula | 
+|------|--------|-----------| 
+|João Pedro Soares| [@jpcirqueira](https://github.com/jpcirqueira) |15/0132344|
+|Lucas Alexandre|[@lucasA27](https://github.com/lucasA27) | 15/0136862|
+|Matheus de Cristo|[@MatheusEstanislau](https://github.com/MatheusEstanislau) | 15/0141220|
+|Moacir Mascarenha|[@moacirmsj](https://github.com/MoacirMSJ)|17/0080366 |
+|Renan Cristyan |[@RCristyan](https://github.com/RCristyan)| 17/0044386 |
