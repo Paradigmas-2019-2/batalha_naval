@@ -155,9 +155,7 @@ jogo dados jogador1 jogador2 = do
 executarJogo::Jogadores->[Char]->[Char]->Nome->Nome->Navio->Navio->Vez->IO Jogadores
 executarJogo dados oceano oceano2 jogador1 jogador2 navio1 navio2 vez = do
         --VERIFICAR SE ALGUM JOGADOR VENCEU
-        print navio1
-        print navio2
-        getChar
+      
         if (navio1 == []) then do
             system "clear"
             vencedor jogador2 jogador1
@@ -319,7 +317,7 @@ vencedor jogador jogador2 = do
 
     -- abre o arquivo para escrita para atualizá-lo
     arq <- openFile "historico.txt" WriteMode
-    hPutStrLn arq (jogador++"-Ganhou-do(a)"++jogador2++","++no_arquivo)
+    hPutStrLn arq (jogador++"_Ganhou_do(a)_"++jogador2++","++no_arquivo)
     hClose arq
 
     
