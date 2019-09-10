@@ -50,3 +50,6 @@ para a disciplina de Paradigmas de Programação UNB-2019-2.</p>
 |Matheus de Cristo|[@MatheusEstanislau](https://github.com/MatheusEstanislau) | 15/0141220|
 |Moacir Mascarenha|[@moacirmsj](https://github.com/MoacirMSJ)|17/0080366 |
 |Renan Cristyan |[@RCristyan](https://github.com/RCristyan)| 17/0044386 |
+
+### Referência
+>Marcos Castro:Jogo da velha.Disponivel em:https://gist.github.com/marcoscastro/d6b0be7f6cf600fdb53b
